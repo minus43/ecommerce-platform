@@ -10,7 +10,7 @@ import {
   Box,
   Pagination,
   Breadcrumbs,
-  Link
+  Link,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { products } from '../data/products';
@@ -22,12 +22,24 @@ const CategoryPage = () => {
   const productsPerPage = 12;
 
   useEffect(() => {
-    const filtered = products.filter(product => 
-      product.category.toLowerCase() === category.toLowerCase() &&
-      product.productType === subCategory
-    );
+    console.log('URL params:', { category, subCategory });
+    console.log('All products:', products);
+    
+    const filtered = products.filter(product => {
+      const categoryMatch = product.category.toLowerCase() === category?.toLowerCase();
+      console.log('Checking product:', product, 'categoryMatch:', categoryMatch);
+      
+      if (subCategory) {
+        const subCategoryMatch = product.productType.toLowerCase() === subCategory.toLowerCase();
+        console.log('subCategoryMatch:', subCategoryMatch);
+        return categoryMatch && subCategoryMatch;
+      }
+      return categoryMatch;
+    });
+    
+    console.log('Filtered products:', filtered);
     setFilteredProducts(filtered);
-    setPage(1); // Reset page when category/subcategory changes
+    setPage(1);
   }, [category, subCategory]);
 
   const handlePageChange = (event, value) => {
@@ -41,23 +53,27 @@ const CategoryPage = () => {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <Container maxWidth='lg' sx={{ mt: 4 }}>
       {/* 브레드크럼브 네비게이션 */}
       <Breadcrumbs sx={{ mb: 3 }}>
-        <Link component={RouterLink} to="/" color="inherit">
+        <Link component={RouterLink} to='/' color='inherit'>
           홈
         </Link>
-        <Link component={RouterLink} to={`/category/${category}`} color="inherit">
+        <Link
+          component={RouterLink}
+          to={`/category/${category}`}
+          color='inherit'
+        >
           {category}
         </Link>
-        <Typography color="text.primary">{subCategory}</Typography>
+        <Typography color='text.primary'>{subCategory}</Typography>
       </Breadcrumbs>
 
       {/* 카테고리 제목 */}
-      <Typography variant="h4" gutterBottom>
+      <Typography variant='h4' gutterBottom>
         {subCategory}
       </Typography>
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
+      <Typography variant='subtitle1' color='text.secondary' sx={{ mb: 4 }}>
         총 {filteredProducts.length}개의 상품
       </Typography>
 
@@ -76,31 +92,31 @@ const CategoryPage = () => {
                 '&:hover': {
                   boxShadow: 3,
                   transform: 'translateY(-4px)',
-                  transition: 'all 0.2s ease-in-out'
-                }
+                  transition: 'all 0.2s ease-in-out',
+                },
               }}
             >
               <CardMedia
-                component="img"
+                component='img'
                 sx={{
                   height: 280,
-                  objectFit: 'cover'
+                  objectFit: 'cover',
                 }}
                 image={product.image}
                 alt={product.name}
               />
               <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                <Typography 
-                  variant="subtitle2" 
-                  color="text.secondary" 
+                <Typography
+                  variant='subtitle2'
+                  color='text.secondary'
                   gutterBottom
                 >
                   {product.brand}
                 </Typography>
-                <Typography 
-                  variant="body1" 
-                  component="h2" 
-                  sx={{ 
+                <Typography
+                  variant='body1'
+                  component='h2'
+                  sx={{
                     mb: 1,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -113,22 +129,26 @@ const CategoryPage = () => {
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   {product.discount > 0 && (
-                    <Typography 
-                      variant="body1" 
-                      color="error.main" 
+                    <Typography
+                      variant='body1'
+                      color='error.main'
                       sx={{ fontWeight: 'bold' }}
                     >
                       {product.discount}%
                     </Typography>
                   )}
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    ₩{(product.price * (1 - product.discount/100)).toLocaleString()}
+                  <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+                    ₩
+                    {(
+                      product.price *
+                      (1 - product.discount / 100)
+                    ).toLocaleString()}
                   </Typography>
                 </Box>
                 {product.discount > 0 && (
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary" 
+                  <Typography
+                    variant='body2'
+                    color='text.secondary'
                     sx={{ textDecoration: 'line-through' }}
                   >
                     ₩{product.price.toLocaleString()}
@@ -142,16 +162,16 @@ const CategoryPage = () => {
 
       {/* 페이지네이션 */}
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <Pagination 
-          count={pageCount} 
-          page={page} 
+        <Pagination
+          count={pageCount}
+          page={page}
           onChange={handlePageChange}
-          color="primary"
-          size="large"
+          color='primary'
+          size='large'
         />
       </Box>
     </Container>
   );
 };
 
-export default CategoryPage; 
+export default CategoryPage;

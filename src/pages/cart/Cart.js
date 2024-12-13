@@ -24,22 +24,39 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 function Cart() {
   const navigate = useNavigate();
-  // 장바구니 아이템 상태
+  
+  // 더미데이터로 초기 상태 설정
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      name: "상품 1",
-      price: 29000,
+      name: "프리미엄 원목 식탁",
+      price: 299000,
       quantity: 1,
-      image: "https://source.unsplash.com/random?product=1",
+      image: "https://source.unsplash.com/random/furniture/1",
       selected: true
     },
     {
       id: 2,
-      name: "상품 2",
-      price: 39000,
+      name: "모던 패브릭 소파",
+      price: 599000,
+      quantity: 1,
+      image: "https://source.unsplash.com/random/furniture/2",
+      selected: true
+    },
+    {
+      id: 3,
+      name: "북유럽 스타일 의자",
+      price: 89000,
       quantity: 2,
-      image: "https://source.unsplash.com/random?product=2",
+      image: "https://source.unsplash.com/random/furniture/3",
+      selected: true
+    },
+    {
+      id: 4,
+      name: "LED 침실 조명",
+      price: 129000,
+      quantity: 1,
+      image: "https://source.unsplash.com/random/furniture/4",
       selected: true
     }
   ]);
@@ -82,15 +99,37 @@ function Cart() {
       return;
     }
 
-    // 선택된 상품 정보를 state로 전달
+    // 체크아웃 페이지로 이동할 때 데이터 전달 방식 수정
     navigate('/checkout', { 
       state: { 
-        items: selectedItems,
-        totalPrice: totalPrice,
-        totalQuantity: selectedItems.reduce((sum, item) => sum + item.quantity, 0)
+        orderItems: selectedItems,  // 'items' 대신 'orderItems'로 변경
+        totalPrice: totalPrice
       } 
     });
   };
+
+  // 장바구니가 비어있을 때의 처리
+  if (cartItems.length === 0) {
+    return (
+      <Container maxWidth="lg">
+        <Typography variant="h4" sx={{ mb: 4 }}>
+          장바구니
+        </Typography>
+        <Paper sx={{ p: 4, textAlign: 'center' }}>
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            장바구니가 비어있습니다
+          </Typography>
+          <Button 
+            variant="contained" 
+            onClick={() => navigate('/')}
+            sx={{ mt: 2 }}
+          >
+            쇼핑 계속하기
+          </Button>
+        </Paper>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg">
@@ -201,6 +240,7 @@ function Cart() {
             variant="contained" 
             fullWidth 
             size="large"
+            sx={{ mt: 2 }}
             onClick={handleCheckout}
           >
             주문하기

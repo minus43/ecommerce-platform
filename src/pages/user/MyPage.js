@@ -2,24 +2,28 @@
 import { useState } from 'react';
 import {
   Container,
-  Box,
+  Grid,
   Typography,
+  Box,
+  Button,
   Paper,
+  Avatar,
   Tabs,
   Tab,
-  Grid,
-  Card,
-  CardContent,
   List,
-  Button,
-  Avatar,
   TextField
 } from '@mui/material';
 import {
   Person as PersonIcon,
   ShoppingBag as ShoppingBagIcon,
   Favorite as FavoriteIcon,
-  LocationOn as LocationIcon
+  LocationOn as LocationIcon,
+  LocalOffer as CouponIcon,
+  QuestionAnswer as InquiryIcon,
+  Help as QnaIcon,
+  Stars as MembershipIcon,
+  Payment as PaymentIcon,
+  ExitToApp as WithdrawalIcon
 } from '@mui/icons-material';
 
 // 탭 패널 컴포넌트
@@ -41,152 +45,30 @@ function TabPanel({ children, value, index, ...other }) {
 
 function MyPage() {
   const [tabValue, setTabValue] = useState(0);
-  const [userInfo] = useState({
+  const userInfo = {
     name: '홍길동',
     email: 'user@example.com',
     phone: '010-1234-5678',
     level: 'GOLD',
     point: 3000
-  });
+  };
+
+  const menuItems = [
+    { title: '주문조회', icon: <ShoppingBagIcon />, component: OrderHistory },
+    { title: '찜 리스트', icon: <FavoriteIcon />, component: WishList },
+    { title: '쿠폰함', icon: <CouponIcon />, component: Coupons },
+    { title: '회원정보', icon: <PersonIcon />, component: ProfileEdit },
+    { title: '상품문의 내역', icon: <InquiryIcon />, component: ProductInquiries },
+    { title: '1:1 문의 내역', icon: <QnaIcon />, component: CustomerInquiries },
+    { title: '등급안내', icon: <MembershipIcon />, component: MembershipInfo },
+    { title: '결제수단', icon: <PaymentIcon />, component: PaymentMethods },
+    { title: '배송지관리', icon: <LocationIcon />, component: AddressManagement },
+    { title: '회원탈퇴', icon: <WithdrawalIcon />, component: Withdrawal }
+  ];
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
-  // 주문 내역 컴포넌트
-  const OrderHistory = () => (
-    <List>
-      {[1, 2, 3].map((order) => (
-        <Paper key={order} sx={{ mb: 2, p: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-            <Typography variant="subtitle1">
-              주문번호: ORDER-2024-{order}
-            </Typography>
-            <Typography color="primary">
-              배송완료
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <img
-              src={`https://source.unsplash.com/random?product=${order}`}
-              alt="Product"
-              style={{ width: 100, height: 100, objectFit: 'cover' }}
-            />
-            <Box>
-              <Typography variant="h6">상품명 {order}</Typography>
-              <Typography color="text.secondary">
-                ₩{(order * 10000).toLocaleString()}
-              </Typography>
-              <Typography variant="body2">
-                주문일자: 2024-01-{order}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button variant="outlined" size="small">주문상세</Button>
-            <Button variant="outlined" size="small">배송조회</Button>
-            <Button variant="outlined" size="small">리뷰작성</Button>
-          </Box>
-        </Paper>
-      ))}
-    </List>
-  );
-
-  // 찜 목록 컴포넌트
-  const WishList = () => (
-    <Grid container spacing={2}>
-      {[1, 2, 3, 4].map((item) => (
-        <Grid item xs={12} sm={6} md={4} key={item}>
-          <Card>
-            <img
-              src={`https://source.unsplash.com/random?wishlist=${item}`}
-              alt={`Wishlist item ${item}`}
-              style={{ width: '100%', height: 200, objectFit: 'cover' }}
-            />
-            <CardContent>
-              <Typography variant="h6">찜한상품 {item}</Typography>
-              <Typography color="text.secondary">
-                ₩{(item * 15000).toLocaleString()}
-              </Typography>
-              <Button variant="contained" fullWidth sx={{ mt: 2 }}>
-                장바구니 담기
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
-  );
-
-  // 회원정보 수정 컴포넌트
-  const ProfileEdit = () => (
-    <Box component="form" noValidate sx={{ mt: 1 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-            <Avatar sx={{ width: 100, height: 100, mr: 2 }}>
-              {userInfo.name[0]}
-            </Avatar>
-            <Button variant="outlined">프로필 이미지 변경</Button>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="이름"
-            defaultValue={userInfo.name}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="이메일"
-            defaultValue={userInfo.email}
-            disabled
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="전화번호"
-            defaultValue={userInfo.phone}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" fullWidth>
-            정보 수정
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-
-  // 배송지 관리 컴포넌트
-  const AddressManagement = () => (
-    <Box>
-      <Button variant="contained" sx={{ mb: 2 }}>
-        새 배송지 추가
-      </Button>
-      <List>
-        {[1, 2].map((address) => (
-          <Paper key={address} sx={{ mb: 2, p: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {address === 1 ? '집' : '회사'}
-                {address === 1 && ' (기본배송지)'}
-              </Typography>
-              <Box>
-                <Button size="small">수정</Button>
-                <Button size="small" color="error">삭제</Button>
-              </Box>
-            </Box>
-            <Typography>서울시 강남구 테헤란로 123</Typography>
-            <Typography color="text.secondary">010-1234-5678</Typography>
-          </Paper>
-        ))}
-      </List>
-    </Box>
-  );
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -194,18 +76,12 @@ function MyPage() {
       <Paper sx={{ p: 3, mb: 3 }}>
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-            <Avatar sx={{ width: 64, height: 64 }}>
-              {userInfo.name[0]}
-            </Avatar>
+            <Avatar sx={{ width: 64, height: 64 }}>{userInfo.name[0]}</Avatar>
           </Grid>
           <Grid item xs>
             <Typography variant="h5">{userInfo.name}님</Typography>
-            <Typography color="text.secondary">
-              회원등급: {userInfo.level}
-            </Typography>
-            <Typography color="text.secondary">
-              포인트: {userInfo.point.toLocaleString()}P
-            </Typography>
+            <Typography color="text.secondary">회원등급: {userInfo.level}</Typography>
+            <Typography color="text.secondary">포인트: {userInfo.point.toLocaleString()}P</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -218,27 +94,118 @@ function MyPage() {
           variant="scrollable"
           scrollButtons="auto"
         >
-          <Tab icon={<ShoppingBagIcon />} label="주문내역" />
-          <Tab icon={<FavoriteIcon />} label="찜 목록" />
-          <Tab icon={<PersonIcon />} label="회원정보 수정" />
-          <Tab icon={<LocationIcon />} label="배송지 관리" />
+          {menuItems.map((item, index) => (
+            <Tab key={item.title} icon={item.icon} label={item.title} />
+          ))}
         </Tabs>
 
-        <TabPanel value={tabValue} index={0}>
-          <OrderHistory />
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <WishList />
-        </TabPanel>
-        <TabPanel value={tabValue} index={2}>
-          <ProfileEdit />
-        </TabPanel>
-        <TabPanel value={tabValue} index={3}>
-          <AddressManagement />
-        </TabPanel>
+        {menuItems.map((item, index) => (
+          <TabPanel key={item.title} value={tabValue} index={index}>
+            <item.component />
+          </TabPanel>
+        ))}
       </Paper>
     </Container>
   );
 }
+
+// 각 탭에 대한 컴포넌트들
+const OrderHistory = () => (
+  <List>
+    <Typography>주문 내역이 들어갈 예정입니다.</Typography>
+  </List>
+);
+
+const WishList = () => (
+  <Grid container spacing={2}>
+    <Grid item xs={12}>
+      <Typography>찜 목록이 들어갈 예정입니다.</Typography>
+    </Grid>
+  </Grid>
+);
+
+const Coupons = () => (
+  <List>
+    <Typography>쿠폰함 내용이 들어갈 예정입니다.</Typography>
+  </List>
+);
+
+const ProfileEdit = () => (
+  <Box component="form" noValidate>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="이름"
+          defaultValue="홍길동"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="이메일"
+          defaultValue="user@example.com"
+          disabled
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="전화번호"
+          defaultValue="010-1234-5678"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Button variant="contained" fullWidth>
+          정보 수정
+        </Button>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+const ProductInquiries = () => (
+  <List>
+    <Typography>상품문의 내역이 들어갈 예정입니다.</Typography>
+  </List>
+);
+
+const CustomerInquiries = () => (
+  <List>
+    <Typography>1:1 문의 내역이 들어갈 예정입니다.</Typography>
+  </List>
+);
+
+const MembershipInfo = () => (
+  <Box>
+    <Typography>등급안내 내용이 들어갈 예정입니다.</Typography>
+  </Box>
+);
+
+const PaymentMethods = () => (
+  <Box>
+    <Typography>결제수단 관리 내용이 들어갈 예정입니다.</Typography>
+  </Box>
+);
+
+const AddressManagement = () => (
+  <List>
+    <Typography>배송지 관리 내용이 들어갈 예정입니다.</Typography>
+  </List>
+);
+
+const Withdrawal = () => (
+  <Box>
+    <Typography variant="h6" color="error" gutterBottom>
+      회원 탈퇴
+    </Typography>
+    <Typography color="text.secondary" paragraph>
+      회원 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.
+    </Typography>
+    <Button variant="contained" color="error">
+      회원 탈퇴
+    </Button>
+  </Box>
+);
 
 export default MyPage;

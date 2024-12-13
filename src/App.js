@@ -5,11 +5,12 @@ import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import Login from './pages/user/Login';
 import Register from './pages/user/Register';
-import ProductList from './pages/product/ProductList';
 import ProductDetail from './pages/product/ProductDetail';
 import Cart from './pages/cart/Cart';
 import MyPage from './pages/user/MyPage';
 import Checkout from './pages/order/Checkout';
+import CategoryPage from './pages/CategoryPage';
+import CustomerService from './pages/customer-service/CustomerService';
 // MUI 테마 커스터마이징
 const theme = createTheme({
   palette: {
@@ -59,12 +60,13 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/products" element={<ProductList />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/category/:category" element={<CategoryPage />} />
+              <Route path="/category/:category/:subCategory" element={<CategoryPage />} />
               <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/customer-service" element={<CustomerService />} />
             </Routes>
           </Box>
           <Footer />

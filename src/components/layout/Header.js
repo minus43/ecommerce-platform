@@ -195,7 +195,7 @@ const Header = () => {
               mt: '10px',
               '& .MuiPaper-root': {
                 width: '250px',
-                maxHeight: '80vh'
+                maxHeight: '400px'
               }
             }}
           >
@@ -209,9 +209,21 @@ const Header = () => {
                   py: 2
                 }}
               >
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                <Link
+                  component={RouterLink}
+                  to={`/category/${category.toLowerCase()}`}
+                  onClick={handleCloseCategoryMenu}
+                  sx={{
+                    color: 'text.primary',
+                    textDecoration: 'none',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      color: 'primary.main'
+                    }
+                  }}
+                >
                   {category}
-                </Typography>
+                </Link>
                 <Box sx={{ 
                   display: 'flex', 
                   flexWrap: 'wrap', 
